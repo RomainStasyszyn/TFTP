@@ -52,8 +52,7 @@ void aff(const struct pcap_pkthdr *hdr){
     numero++;
     if(verb==3){
         printf("-----------------------------------------------------------\n");
-        couleur("31");
-        couleur("1");
+        couleur("1;31");
         printf("\t\t Packet n°%i\n",numero);
         couleur("0");
         printf("-----------------------------------------------------------\n");
@@ -121,7 +120,9 @@ void aff(const struct pcap_pkthdr *hdr){
                                 }
                                 break;
                             default:
-                                print_tftp_apli();
+                                // if(ntohs(udp->dest) == 69){
+                                    print_tftp_apli();
+                                // }
                                 break;
                         }
                     }
@@ -137,8 +138,7 @@ void aff(const struct pcap_pkthdr *hdr){
         case 0x86dd:
             if(verb==1){
                 printf("|---------------|---------------|------|------| ");
-                couleur("35");
-                couleur("1");
+                couleur("1;35");
                 printf("IPV6");
                 couleur("0");
             }
@@ -146,8 +146,7 @@ void aff(const struct pcap_pkthdr *hdr){
         case 0x8035:
             if(verb==1){
                 printf("|---------------|---------------|------|------| ");
-                couleur("35");
-                couleur("1");
+                couleur("1;35");
                 printf("RARP");
                 couleur("0");
             }
@@ -155,8 +154,7 @@ void aff(const struct pcap_pkthdr *hdr){
         case 0x8100:
             if(verb==1){
                 printf("|---------------|---------------|------|------| ");
-                couleur("35");
-                couleur("1");
+                couleur("1;35");
                 printf("IPV6");
                 couleur("0");
             }
@@ -175,7 +173,7 @@ void aff(const struct pcap_pkthdr *hdr){
 
 int main (int argc, char *argv[]){
 
-    if (!(argc==1||argc==3||argc==5||argc==7||argc==9)){
+    if (!(argc==2||argc==3)){
         fprintf(stderr,"::erreur:: nbr d'arguments %d\ncommande de type: annalyseur -o <fichier>\n",argc);
         return 2;
     }
@@ -186,13 +184,15 @@ int main (int argc, char *argv[]){
     char* errbuf=NULL;
     verb=1;
     numero=0;
+    pr = 0;
 
     //pensez check argument
-    if(strcmp(argv[1],"-o")==0){
+    if(strcmp(argv[1],"-v")==0){
         fichier=argv[2];
-    } else{
-        fprintf(stderr,"::erreur:: mauvais argument %s\ncommande de type: annalyseur -o <fichier>\n",argv[1]);
-        return 2;
+        pr = 1;
+    } else {
+        fichier=argv[1];
+
     }
 
     FILE* f = NULL;

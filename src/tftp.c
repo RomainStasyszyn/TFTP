@@ -32,7 +32,7 @@ void print_udp(){
 
 void print_tftp_rw(){
 	printf("Name of file : ");
-	int i = 2;
+	int i = 2, c = 0;
 	while(tftp[i] != 0){
 		printf("%c", tftp[i]);
 		i++;
@@ -43,6 +43,20 @@ void print_tftp_rw(){
 		printf("%c", tftp[i]);
 		i++;
 	}
+	i++;
+	printf(" with option : ");
+	couleur("33");
+	while(i < 512 && c < 2){
+		if(tftp[i] == 0){
+			printf(" ");
+			c++;
+		} else if(tftp[i] > 47 && tftp[i] < 126) {
+			printf("%c", tftp[i]);
+			c = 0;
+		}
+		i++;
+	}
+	couleur("0");
 }
 
 void print_tftp_block(){
@@ -53,7 +67,7 @@ void print_tftp_block(){
 
 void print_tftp_error(){
 	couleur("0");
-	int e = tftp[4];
+	int e = tftp[3];
 	printf("Error Code %d :", e);
 	switch (e) {
 		case 0:
@@ -84,10 +98,27 @@ void print_tftp_error(){
 			break;
 	}
 	int i = 4;
+	printf("Message : ");
 	while(tftp[i] != 0){
 		printf("%c", tftp[i]);
 		i++;
 	}
+}
+
+void print_tftp_oack(){
+	int i = 2, c = 0;
+	couleur("33");
+	while(i < 512 && c < 2){
+		if(tftp[i] == 0){
+			printf(" ");
+			c++;
+		} else if(tftp[i] > 47 && tftp[i] < 126) {
+			printf("%c", tftp[i]);
+			c = 0;
+		}
+		i++;
+	}
+	couleur("0");
 }
 
 void print_tftp_apli(){
@@ -119,9 +150,11 @@ void print_tftp_apli(){
 				case 3:
 					printf("DATA ");
 					print_tftp_block();
-					printf("\n");
-					for(i=4; i<udp->len;i++){
-						printf("%c", tftp[i]);
+					if(pr){
+						printf("\n");
+						for(i=4; i<udp->len;i++){
+							printf("%c", tftp[i]);
+						}
 					}
 					break;
 				case 4:
@@ -131,6 +164,10 @@ void print_tftp_apli(){
 				case 5:
 					printf("ERROR\n");
 					print_tftp_error();
+					break;
+				case 6:
+					printf("OACK\n");
+					print_tftp_oack();
 					break;
 				default :
 					printf("%d\n", tftp[1]);

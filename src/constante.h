@@ -17,6 +17,7 @@
 
 char verb;
 int numero;
+int pr;
 
 void* inv (char *v, int taille);
 
