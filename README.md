@@ -1,20 +1,14 @@
-# wireshark-in-C-with-TCPdump
-Projet TSR analyser of the network like wireshark
-only wrok on ubuntu because some library give by ubuntu
+# Projet IngProt - TFTP
 
-fo install:
+Based on wireshark-in-C-with-TCPdump - Projet TSR analyser of the network like wireshark- https://github.com/loic-hourdin/wireshark-in-C-with-TCPdump
 
-sudo apt-get install libpcap0.8-dev
-make
+Only work on ubuntu because of some library
 
-fo use it:
+to install:
+    sudo apt-get install libpcap0.8-dev
+    make
 
-./analyse
+to use it:
+    sudo ./analyse <file.pcap>
+    sudo ./analyse -v <file.pcap> for content of DATA
 
-parameters:
--i <interface>  : interface analyse (default: the interface conected to the web)  
--o <file>  : file .pcap to analyse 
--f <filter>  : filtre BPF between "" (example of filter https://biot.com/capstats/bpf.html) (optionnel)
--v <1..3> :  level of verbosity (1=one line by packet ; 2=one line by protocol ; 3=complete;  default:1)
-
-you can use in same time -i and -o
